@@ -2,12 +2,12 @@ package fc.board.repository;
 
 import fc.board.config.JpaConfig;
 import fc.board.domain.Article;
+import fc.board.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -20,6 +20,8 @@ class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     public JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
@@ -45,9 +47,10 @@ class JpaRepositoryTest {
     public void insert() throws Exception {
         //given
         long previousCount = articleRepository.count();
+        UserAccount userAccount = userAccountRepository.save(UserAccount.of("booki", "pw", null, null, null));
 
         //when
-        Article savedArticle = articleRepository.save(Article.of("new article", "new content", "#spring"));
+        Article savedArticle = articleRepository.save(Article.of(userAccount, "new article", "new content", "#spring"));
 
         //then
         assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
