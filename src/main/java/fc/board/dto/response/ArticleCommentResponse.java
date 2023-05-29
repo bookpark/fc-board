@@ -1,4 +1,4 @@
-package fc.board.response;
+package fc.board.dto.response;
 
 import fc.board.dto.ArticleCommentDto;
 
