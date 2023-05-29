@@ -1,8 +1,9 @@
 package fc.board.controller;
 
-import fc.board.domain.type.SearchType;
-import fc.board.response.ArticleResponse;
-import fc.board.response.ArticleWithCommentsResponse;
+import fc.board.domain.constant.FormStatus;
+import fc.board.domain.constant.SearchType;
+import fc.board.dto.response.ArticleResponse;
+import fc.board.dto.response.ArticleWithCommentsResponse;
 import fc.board.service.ArticleService;
 import fc.board.service.PaginationService;
 import lombok.RequiredArgsConstructor;
@@ -45,14 +46,14 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     public String article(@PathVariable Long articleId, ModelMap map) {
-        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithComments(articleId));
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponse());
         return "articles/detail";
     }
 
     @GetMapping("/search-hashtag")
-    public String searchHashtag(
+    public String searchArticleHashtag(
             @RequestParam(required = false) String searchValue,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
@@ -66,5 +67,11 @@ public class ArticleController {
         map.addAttribute("paginationBarNumbers", barNumbers);
         map.addAttribute("searchType", SearchType.HASHTAG);
         return "articles/search-hashtag";
+    }
+
+    @GetMapping("/form")
+    public String articleForm(ModelMap map) {
+        map.addAttribute("formStatus", FormStatus.CREATE);
+        return "articles/form";
     }
 }
