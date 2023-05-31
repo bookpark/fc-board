@@ -39,16 +39,18 @@ spring:
       detection-strategy: annotated
   thymeleaf3:
     decoupled-logic: true
+
 ---
 
-#spring:
-#  config:
-#    activate:
-#      on-profile: testdb
-#  datasource:
-#    url: jdbc:h2:mem:board;mode=mysql
-#    driver-class-name: org.h2.Driver
-#  sql:
-#    init:
-#      mode: always
-#  test.database.replace: none
+spring:
+  config:
+    activate:
+      on-profile: heroku
+  datasource:
+    url: ${CLEARDB_DATABASE_URL}
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create
